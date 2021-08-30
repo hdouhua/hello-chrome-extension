@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Heath Checker</title>
+  <style>
+    .form-container {
+      padding: 1em;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid black;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #ddd;
+    }
+
+    .correct {
+      background-color: lightgreen;
+    }
+
+    .incorrect {
+      background-color: orange;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-container">
+    <input type="button" value="Check" id="requestBtn" />
+  </div>
+
+  <table id="requestTbl">
+    <tr>
+      <th>Provider</th>
+      <th>Name</th>
+      <th>URL</th>
+      <th>Status Code</th>
+    </tr>
+    <tr>
+      <td colspan="4">no records</td>
+    </tr>
+  </table>
+
+  <script src="main.js"></script>
+</body>
+
+</html>
