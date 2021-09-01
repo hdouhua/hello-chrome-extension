@@ -2,7 +2,9 @@ const ApiUrls = new Map();
 ApiUrls.set("GitHub", [{
   "name": "organization",
   "url": "https://api.github.com/users/octocat/orgs",
-  "method": 'GET'
+  "options": {
+    "method": "GET"
+  }
 }, {
   name: "repos",
   url: "https://api.github.com/orgs/octokit/repos",
@@ -13,6 +15,24 @@ ApiUrls.set("GitHub", [{
   name: "feeds",
   url: "https://api.github.com/feeds",
 },]);
+ApiUrls.set('Go Rest', [{
+  name: 'users',
+  url: 'https://gorest.co.in/public/v1/users',
+  options: {
+    method: 'POST'
+  }
+}]);
+ApiUrls.set('REQ|RES', [{
+  name: 'login',
+  url: 'https://reqres.in/api/login',
+  options: {
+    method: 'POST',
+    body: {
+      "email": "eve.holt@reqres.in",
+      "password": "cityslicka"
+    }
+  }
+}])
 
 document.getElementById('requestBtn').addEventListener('click', function (_) {
   let table = document.getElementById('requestTbl')
@@ -35,18 +55,27 @@ document.getElementById('requestBtn').addEventListener('click', function (_) {
       cell2.textContent = it.name
       cell3.textContent = it.url
 
-      fetch(it.url, {
+      // set body and headers for POST
+      if (it.options && it.options.body) {
+        it.options.body = JSON.stringify(it.options.body)
+        it.options.headers = Object.assign({}, it.options.headers, {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        })
+      }
+
+      fetch(it.url, Object.assign({
         cache: 'no-cache',
-        credentials: 'omit',
-        method: it.method || 'GET'
-      }).then(response => {
+        mode: 'cors',
+        credentials: 'same-origin'
+      }, it.options || {})).then(response => {
         if (response.ok) {
           cell4.textContent = 'OK'
           cell4.className = 'correct'
           return response.json()
         }
 
-        throw new Error(`status: ${response.statusText || response.status}`)
+        throw new Error(`${response.statusText || response.status}`)
       }).catch(reason => {
         console.log(reason)
         cell4.textContent = reason
